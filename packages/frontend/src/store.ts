@@ -223,7 +223,7 @@ export const defaultStore = markRaw(new Storage('base', {
 	},
 	useBlurEffectForModal: {
 		where: 'device',
-		default: !/mobile|iphone|android/.test(navigator.userAgent.toLowerCase()), // 循環参照するのでdevice-kind.tsは参照できない
+		default: false, //標準でモーダルぼかしオンとか死にかねないので標準でオフにした 2023-10-3 1:54
 	},
 	useBlurEffect: {
 		where: 'device',
