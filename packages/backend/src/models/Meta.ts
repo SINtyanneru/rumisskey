@@ -310,6 +310,12 @@ export class MiMeta {
 	public swPrivateKey: string | null;
 
 	@Column('varchar', {
+		length: 32,
+		nullable: true,
+	})
+	public translatorType: string | null;
+
+	@Column('varchar', {
 		length: 1024,
 		nullable: true,
 	})
