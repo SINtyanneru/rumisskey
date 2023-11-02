@@ -17,6 +17,7 @@ import { NoteEntityService } from '@/core/entities/NoteEntityService.js';
 import { NoteCreateService } from '@/core/NoteCreateService.js';
 import { DI } from '@/di-symbols.js';
 import { ApiError } from '../../error.js';
+import { isPureRenote } from '@/misc/is-pure-renote.js';
 
 export const meta = {
 	tags: ['notes'],
@@ -55,6 +56,12 @@ export const meta = {
 			message: 'You can not Renote a pure Renote.',
 			code: 'CANNOT_RENOTE_TO_A_PURE_RENOTE',
 			id: 'fd4cc33e-2a37-48dd-99cc-9b806eb2031a',
+		},
+
+		cannotRenoteDueToVisibility: {
+			message: 'You can not Renote due to target visibility.',
+			code: 'CANNOT_RENOTE_DUE_TO_VISIBILITY',
+			id: 'be9529e9-fe72-4de0-ae43-0b363c4938af',
 		},
 
 		noSuchReplyTarget: {
@@ -215,7 +222,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 				if (renote == null) {
 					throw new ApiError(meta.errors.noSuchRenoteTarget);
-				} else if (renote.renoteId && !renote.text && !renote.fileIds && !renote.hasPoll) {
+				} else if (isPureRenote(renote)) {
 					throw new ApiError(meta.errors.cannotReRenote);
 				}
 
@@ -231,6 +238,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 						throw new ApiError(meta.errors.youHaveBeenBlocked);
 					}
 				}
+
+				if (renote.visibility === 'followers' && renote.userId !== me.id) {
+					// 他人のfollowers noteはreject
+					throw new ApiError(meta.errors.cannotRenoteDueToVisibility);
+				} else if (renote.visibility === 'specified') {
+					// specified / direct noteはreject
+					throw new ApiError(meta.errors.cannotRenoteDueToVisibility);
+				}
 			}
 
 			let reply: MiNote | null = null;
@@ -240,7 +255,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 				if (reply == null) {
 					throw new ApiError(meta.errors.noSuchReplyTarget);
-				} else if (reply.renoteId && !reply.text && !reply.fileIds && !reply.hasPoll) {
+				} else if (isPureRenote(reply)) {
 					throw new ApiError(meta.errors.cannotReplyToPureRenote);
 				}
 

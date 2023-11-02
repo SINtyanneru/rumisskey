@@ -43,7 +43,8 @@ import { instance } from '@/instance.js';
 import { $i } from '@/account.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
 import { miLocalStorage } from '@/local-storage.js';
-import { antennasCache, userListsCache } from '@/cache';
+import { antennasCache, userListsCache } from '@/cache.js';
+import { deviceKind } from '@/scripts/device-kind.js';
 
 provide('shouldOmitHeaderTitle', true);
 
@@ -62,10 +63,14 @@ let queue = $ref(0);
 let srcWhenNotSignin = $ref(isLocalTimelineAvailable ? 'local' : 'global');
 const src = $computed({ get: () => ($i ? defaultStore.reactiveState.tl.value.src : srcWhenNotSignin), set: (x) => saveSrc(x) });
 const withRenotes = $ref(true);
-const withReplies = $ref(false);
+const withReplies = $ref($i ? defaultStore.state.tlWithReplies : false);
 const onlyFiles = $ref(false);
 
 watch($$(src), () => queue = 0);
+
+watch($$(withReplies), (x) => {
+	if ($i) defaultStore.set('tlWithReplies', x);
+});
 
 function queueUpdated(q: number): void {
 	queue = q;
@@ -135,28 +140,42 @@ function focus(): void {
 	tlComponent.focus();
 }
 
-const headerActions = $computed(() => [{
-	icon: 'ti ti-dots',
-	text: i18n.ts.options,
-	handler: (ev) => {
-		os.popupMenu([{
-			type: 'switch',
-			text: i18n.ts.showRenotes,
-			icon: 'ti ti-repeat',
-			ref: $$(withRenotes),
-		}, {
-			type: 'switch',
-			text: i18n.ts.withReplies,
-			icon: 'ti ti-arrow-back-up',
-			ref: $$(withReplies),
-		}, {
-			type: 'switch',
-			text: i18n.ts.fileAttachedOnly,
-			icon: 'ti ti-photo',
-			ref: $$(onlyFiles),
-		}], ev.currentTarget ?? ev.target);
-	},
-}]);
+const headerActions = $computed(() => {
+	const tmp = [
+		{
+			icon: 'ti ti-dots',
+			text: i18n.ts.options,
+			handler: (ev) => {
+				os.popupMenu([{
+					type: 'switch',
+					text: i18n.ts.showRenotes,
+					icon: 'ti ti-repeat',
+					ref: $$(withRenotes),
+				}, src === 'local' || src === 'social' ? {
+					type: 'switch',
+					text: i18n.ts.showRepliesToOthersInTimeline,
+					ref: $$(withReplies),
+				} : undefined, {
+					type: 'switch',
+					text: i18n.ts.fileAttachedOnly,
+					icon: 'ti ti-photo',
+					ref: $$(onlyFiles),
+				}], ev.currentTarget ?? ev.target);
+			},
+		},
+	];
+	if (deviceKind === 'desktop') {
+		tmp.unshift({
+			icon: 'ti ti-refresh',
+			text: i18n.ts.reload,
+			handler: (ev: Event) => {
+				console.log('called');
+				tlComponent.reloadTimeline();
+			},
+		});
+	}
+	return tmp;
+});
 
 const headerTabs = $computed(() => [...(defaultStore.reactiveState.pinnedUserLists.value.map(l => ({
 	key: 'list:' + l.id,
