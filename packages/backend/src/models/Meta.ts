@@ -310,6 +310,12 @@ export class MiMeta {
 	public swPrivateKey: string | null;
 
 	@Column('varchar', {
+		length: 32,
+		nullable: true,
+	})
+	public translatorType: string | null;
+
+	@Column('varchar', {
 		length: 1024,
 		nullable: true,
 	})
@@ -328,14 +334,14 @@ export class MiMeta {
 
 	@Column('varchar', {
 		length: 1024,
-		default: 'https://github.com/misskey-dev/misskey',
+		default: 'https://github.com/SINtyanneru/rumisskey',
 		nullable: false,
 	})
 	public repositoryUrl: string;
 
 	@Column('varchar', {
 		length: 1024,
-		default: 'https://github.com/misskey-dev/misskey/issues/new',
+		default: 'https://github.com/SINtyanneru/rumisskey/issues/new',
 		nullable: true,
 	})
 	public feedbackUrl: string | null;
@@ -493,6 +499,11 @@ export class MiMeta {
 		default: true,
 	})
 	public enableFanoutTimeline: boolean;
+
+	@Column('boolean', {
+		default: true,
+	})
+	public enableFanoutTimelineDbFallback: boolean;
 
 	@Column('integer', {
 		default: 300,

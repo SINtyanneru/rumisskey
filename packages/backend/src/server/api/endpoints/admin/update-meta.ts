@@ -81,6 +81,7 @@ export const paramDef = {
 			},
 		},
 		summalyProxy: { type: 'string', nullable: true },
+		translatorType: { type: 'string', nullable: true },
 		deeplAuthKey: { type: 'string', nullable: true },
 		deeplIsPro: { type: 'boolean' },
 		enableEmail: { type: 'boolean' },
@@ -121,6 +122,7 @@ export const paramDef = {
 		preservedUsernames: { type: 'array', items: { type: 'string' } },
 		manifestJsonOverride: { type: 'string' },
 		enableFanoutTimeline: { type: 'boolean' },
+		enableFanoutTimelineDbFallback: { type: 'boolean' },
 		perLocalUserUserTimelineCacheMax: { type: 'integer' },
 		perRemoteUserUserTimelineCacheMax: { type: 'integer' },
 		perUserHomeTimelineCacheMax: { type: 'integer' },
@@ -433,6 +435,14 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				set.objectStorageS3ForcePathStyle = ps.objectStorageS3ForcePathStyle;
 			}
 
+			if (ps.translatorType !== undefined) {
+				if (ps.translatorType === '') {
+					set.translatorType = null;
+				} else {
+					set.translatorType = ps.translatorType;
+				}
+			}
+
 			if (ps.deeplAuthKey !== undefined) {
 				if (ps.deeplAuthKey === '') {
 					set.deeplAuthKey = null;
@@ -483,6 +493,10 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 
 			if (ps.enableFanoutTimeline !== undefined) {
 				set.enableFanoutTimeline = ps.enableFanoutTimeline;
+			}
+
+			if (ps.enableFanoutTimelineDbFallback !== undefined) {
+				set.enableFanoutTimelineDbFallback = ps.enableFanoutTimelineDbFallback;
 			}
 
 			if (ps.perLocalUserUserTimelineCacheMax !== undefined) {

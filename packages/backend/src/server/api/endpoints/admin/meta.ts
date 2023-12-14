@@ -105,6 +105,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			translatorType: {
+				type: 'string',
+				optional: false, nullable: true,
+			},
 			silencedHosts: {
 				type: 'array',
 				optional: true,
@@ -295,6 +299,10 @@ export const meta = {
 				type: 'boolean',
 				optional: false, nullable: false,
 			},
+			enableFanoutTimelineDbFallback: {
+				type: 'boolean',
+				optional: false, nullable: false,
+			},
 			perLocalUserUserTimelineCacheMax: {
 				type: 'number',
 				optional: false, nullable: false,
@@ -375,7 +383,9 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				defaultDarkTheme: instance.defaultDarkTheme,
 				enableEmail: instance.enableEmail,
 				enableServiceWorker: instance.enableServiceWorker,
-				translatorAvailable: instance.deeplAuthKey != null,
+				// translatorAvailable: instance.deeplAuthKey != null,
+		        translatorAvailable: instance.translatorType != null,
+		        translatorType: instance.translatorType,
 				cacheRemoteFiles: instance.cacheRemoteFiles,
 				cacheRemoteSensitiveFiles: instance.cacheRemoteSensitiveFiles,
 				pinnedUsers: instance.pinnedUsers,
@@ -424,6 +434,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				policies: { ...DEFAULT_POLICIES, ...instance.policies },
 				manifestJsonOverride: instance.manifestJsonOverride,
 				enableFanoutTimeline: instance.enableFanoutTimeline,
+				enableFanoutTimelineDbFallback: instance.enableFanoutTimelineDbFallback,
 				perLocalUserUserTimelineCacheMax: instance.perLocalUserUserTimelineCacheMax,
 				perRemoteUserUserTimelineCacheMax: instance.perRemoteUserUserTimelineCacheMax,
 				perUserHomeTimelineCacheMax: instance.perUserHomeTimelineCacheMax,
