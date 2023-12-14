@@ -10,6 +10,7 @@ import * as ep___admin_meta from './endpoints/admin/meta.js';
 import * as ep___admin_abuseUserReports from './endpoints/admin/abuse-user-reports.js';
 import * as ep___admin_accounts_create from './endpoints/admin/accounts/create.js';
 import * as ep___admin_accounts_delete from './endpoints/admin/accounts/delete.js';
+import * as ep___admin_accounts_findByEmail from './endpoints/admin/accounts/find-by-email.js';
 import * as ep___admin_ad_create from './endpoints/admin/ad/create.js';
 import * as ep___admin_ad_delete from './endpoints/admin/ad/delete.js';
 import * as ep___admin_ad_list from './endpoints/admin/ad/list.js';
@@ -230,7 +231,7 @@ import * as ep___i_registry_get from './endpoints/i/registry/get.js';
 import * as ep___i_registry_keysWithType from './endpoints/i/registry/keys-with-type.js';
 import * as ep___i_registry_keys from './endpoints/i/registry/keys.js';
 import * as ep___i_registry_remove from './endpoints/i/registry/remove.js';
-import * as ep___i_registry_scopes from './endpoints/i/registry/scopes.js';
+import * as ep___i_registry_scopesWithDomain from './endpoints/i/registry/scopes-with-domain.js';
 import * as ep___i_registry_set from './endpoints/i/registry/set.js';
 import * as ep___i_revokeToken from './endpoints/i/revoke-token.js';
 import * as ep___i_signinHistory from './endpoints/i/signin-history.js';
@@ -366,6 +367,7 @@ const eps = [
 	['admin/abuse-user-reports', ep___admin_abuseUserReports],
 	['admin/accounts/create', ep___admin_accounts_create],
 	['admin/accounts/delete', ep___admin_accounts_delete],
+	['admin/accounts/find-by-email', ep___admin_accounts_findByEmail],
 	['admin/ad/create', ep___admin_ad_create],
 	['admin/ad/delete', ep___admin_ad_delete],
 	['admin/ad/list', ep___admin_ad_list],
@@ -586,7 +588,7 @@ const eps = [
 	['i/registry/keys-with-type', ep___i_registry_keysWithType],
 	['i/registry/keys', ep___i_registry_keys],
 	['i/registry/remove', ep___i_registry_remove],
-	['i/registry/scopes', ep___i_registry_scopes],
+	['i/registry/scopes-with-domain', ep___i_registry_scopesWithDomain],
 	['i/registry/set', ep___i_registry_set],
 	['i/revoke-token', ep___i_revokeToken],
 	['i/signin-history', ep___i_signinHistory],
