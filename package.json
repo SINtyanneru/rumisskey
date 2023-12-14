@@ -44,6 +44,7 @@
 		"lodash": "4.17.21"
 	},
 	"dependencies": {
+		"@vitalets/google-translate-api": "8.0.0",
 		"execa": "8.0.1",
 		"cssnano": "6.0.1",
 		"js-yaml": "4.1.0",
