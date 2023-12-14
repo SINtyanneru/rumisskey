@@ -18,7 +18,7 @@ import type { FastifyInstance, FastifyPluginOptions } from 'fastify';
 
 const nodeinfo2_1path = '/nodeinfo/2.1';
 const nodeinfo2_0path = '/nodeinfo/2.0';
-const nodeinfo_homepage = 'https://misskey-hub.net';
+const nodeinfo_homepage = 'https://rumiserver.com';
 
 @Injectable()
 export class NodeinfoServerService {
@@ -77,7 +77,7 @@ export class NodeinfoServerService {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			const document: any = {
 				software: {
-					name: 'misskey',
+					name: 'rumisskey',
 					version: this.config.version,
 					homepage: nodeinfo_homepage,
 					repository: meta.repositoryUrl,
