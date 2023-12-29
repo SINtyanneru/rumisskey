@@ -42,11 +42,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { } from 'vue';
+import { ref, computed } from 'vue';
 import XHeader from './_header_.vue';
 import MkInput from '@/components/MkInput.vue';
 import MkButton from '@/components/MkButton.vue';
 import MkRadios from '@/components/MkRadios.vue';
+import MkSwitch from '@/components/MkSwitch.vue';
 import FormSuspense from '@/components/form/suspense.vue';
 import FormSection from '@/components/form/section.vue';
 import * as os from '@/os.js';
@@ -75,9 +76,9 @@ function save() {
 	});
 }
 
-const headerActions = $computed(() => []);
+const headerActions = computed(() => []);
 
-const headerTabs = $computed(() => []);
+const headerTabs = computed(() => []);
 
 definePageMetadata({
 	title: i18n.ts.externalServices,
