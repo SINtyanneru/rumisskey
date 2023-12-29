@@ -1,4 +1,4 @@
-## 2023.12.31 (Unreleased)
+## 2023.12.31
 
 ### General
 - Misskey ver.2023.12.2 に追従
