@@ -340,8 +340,7 @@ export default class extends Endpoint<typeof meta, typeof paramDef> { // eslint-
 				enableEmail: instance.enableEmail,
 				enableServiceWorker: instance.enableServiceWorker,
 
-				// translatorAvailable: instance.deeplAuthKey != null,
-		        translatorAvailable: instance.translatorType != null,
+				translatorAvailable: instance.deeplAuthKey != null,
 
 				serverRules: instance.serverRules,
 
