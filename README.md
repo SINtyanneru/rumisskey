@@ -3,7 +3,7 @@
 	<img src="./assets/title_float.svg" alt="Misskey logo" style="border-radius:50%" width="400"/>
 </a>
 
-**🌎 **[Misskey](https://misskey-hub.net/)** is an open source, decentralized social media platform that's free forever! 🚀**
+**🌎 **[Misskey](https://misskey-hub.net/)** はオープンソースの分散型ソーシャルメディア・プラットフォームで、永久に無料だ！ 🚀**
 
 ---
 
@@ -32,47 +32,47 @@
 
 <a href="https://xn--931a.moe/"><img src="https://github.com/misskey-dev/misskey/blob/develop/assets/ai.png?raw=true" align="right" height="320px"/></a>
 
-## ✨ Features
-- **ActivityPub support**\
-Not on Misskey? No problem! Not only can Misskey instances talk to each other, but you can make friends with people on other networks like Mastodon and Pixelfed!
-- **Reactions**\
-You can add emoji reactions to any post! No longer are you bound by a like button, show everyone exactly how you feel with the tap of a button.
-- **Drive**\
-With Misskey's built in drive, you get cloud storage right in your social media, where you can upload any files, make folders, and find media from posts you've made!
-- **Rich Web UI**\
-	Misskey has a rich and easy to use Web UI!
-	It is highly customizable, from changing the layout and adding widgets to making custom themes.
-	Furthermore, plugins can be created using AiScript, an original programming language.
-- And much more...
+## ✨ 特徴
+- **ActivityPubのサポート**\
+Misskeyに登録されていませんか？大丈夫です！Misskeyのインスタンス同士で会話できるだけでなく、MastodonやPixelfedなどの他のネットワークの人とも友達になれます！
+- **リアクション**\
+どんな投稿にも絵文字のリアクションを追加できます！もう「いいね！」ボタンに縛られる必要はありません。ボタンをタップするだけで、あなたの気持ちをみんなに伝えることができます。
+- **ドライブ**\
+Misskeyの内蔵ドライブを使えば、ソーシャルメディアの中にクラウドストレージができ、ファイルをアップロードしたり、フォルダを作ったり、投稿したメディアを探したりすることができます！
+- **リッチなウェブUI**\
+	Misskeyはリッチで使いやすいウェブUIを備えています！
+	レイアウトの変更やウィジェットの追加、カスタムテーマの作成など、カスタマイズ性に優れています。
+	さらに、独自のプログラミング言語「AiScript」を使ってプラグインを作成することもできます。
+- その他にも...
 
 </div>
 
 <div style="clear: both;"></div>
 
-## Documentation
+## ドキュメント
 
-Misskey Documentation can be found at [Misskey Hub](https://misskey-hub.net/), some of the links and graphics above also lead to specific portions of it.
+Misskeyのドキュメンテーションは[Misskey Hub](https://misskey-hub.net/)にあります。上記のリンクやグラフィックのいくつかは、その中の特定の部分にもつながっています。
 
-## Sponsors
+## スポンサー
 
 <div align="center">
 	<a class="rss3" title="RSS3" href="https://rss3.io/" target="_blank"><img src="https://rss3.mypinata.cloud/ipfs/QmUG6H3Z7D5P511shn7sB4CPmpjH5uZWu4m5mWX7U3Gqbu" alt="RSS3" height="60"></a>
 </div>
 
-## Thanks
+## スペシャルサンクス
 
 <a href="https://www.chromatic.com/"><img src="https://user-images.githubusercontent.com/321738/84662277-e3db4f80-af1b-11ea-88f5-91d67a5e59f6.png" height="30" alt="Chromatic" /></a>
 
-Thanks to [Chromatic](https://www.chromatic.com/) for providing the visual testing platform that helps us review UI changes and catch visual regressions.
+[Chromatic](https://www.chromatic.com/)には、UIの変更をレビューし、視覚的なリグレッションを発見するのに役立つビジュアルテストプラットフォームを提供してもらい感謝している。
 
 <a href="https://about.codecov.io/for/open-source/"><img src="https://about.codecov.io/wp-content/themes/codecov/assets/brand/sentry-cobranding/logos/codecov-by-sentry-logo.svg" height="30" alt="Codecov" /></a>
 
-Thanks to [Codecov](https://about.codecov.io/for/open-source/) for providing the code coverage platform that helps us improve our test coverage.
+[Codecov](https://about.codecov.io/for/open-source/) にはテスト・カバレッジの向上に役立つコード・カバレッジ・プラットフォームを提供してもらい感謝している。
 
 <a href="https://crowdin.com/"><img src="https://user-images.githubusercontent.com/20679825/230709597-1299a011-171a-4294-a91e-355a9b37c672.svg" height="30" alt="Crowdin" /></a>
 
-Thanks to [Crowdin](https://crowdin.com/) for providing the localization platform that helps us translate Misskey into many languages.
+[Crowdin](https://crowdin.com/)には、Misskeyを多くの言語に翻訳するためのローカリゼーション・プラットフォームを提供していただき感謝しています。
 
 <a href="https://hub.docker.com/"><img src="https://user-images.githubusercontent.com/20679825/230148221-f8e73a32-a49b-47c3-9029-9a15c3824f92.png" height="30" alt="Docker" /></a>
 
-Thanks to [Docker](https://hub.docker.com/) for providing the container platform that helps us run Misskey in production.
+[Docker](https://hub.docker.com/)には、Misskeyの本番稼働を助けてくれるコンテナプラットフォームを提供してもらい感謝しています。
