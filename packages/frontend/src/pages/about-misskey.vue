@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-FileCopyrightText: syuilo and misskey-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
@@ -15,14 +15,14 @@ SPDX-License-Identifier: AGPL-3.0-only
 						<div class="misskey">Rumisskey</div>
 						<div class="version">v{{ version }}</div>
 						<span v-for="emoji in easterEggEmojis" :key="emoji.id" class="emoji" :data-physics-x="emoji.left" :data-physics-y="emoji.top" :class="{ _physics_circle_: !emoji.emoji.startsWith(':') }">
-							<MkCustomEmoji v-if="emoji.emoji[0] === ':'" class="emoji" :name="emoji.emoji" :normal="true" :noStyle="true"/>
+							<MkCustomEmoji v-if="emoji.emoji[0] === ':'" class="emoji" :name="emoji.emoji" :normal="true" :noStyle="true" :fallbackToImage="true"/>
 							<MkEmoji v-else class="emoji" :emoji="emoji.emoji" :normal="true" :noStyle="true"/>
 						</span>
 					</div>
 					<button v-if="thereIsTreasure" class="_button treasure" @click="getTreasure"><img src="/fluent-emoji/1f3c6.png" class="treasureImg"></button>
 				</div>
 				<div style="text-align: center;">
-					{{ i18n.ts._aboutMisskey.about }}<br><a href="https://misskey-hub.net/docs/misskey.html" target="_blank" class="_link">{{ i18n.ts.learnMore }}</a>
+					{{ i18n.ts._aboutMisskey.about }}<br><a href="https://misskey-hub.net/docs/about-misskey/" target="_blank" class="_link">{{ i18n.ts.learnMore }}</a>
 				</div>
 				<div v-if="$i != null" style="text-align: center;">
 					<MkButton primary rounded inline @click="iLoveMisskey">I <Mfm text="$[jelly ❤]"/> #Rumisskey</MkButton>
@@ -39,6 +39,25 @@ SPDX-License-Identifier: AGPL-3.0-only
 							{{ i18n.ts._aboutMisskey.source }}
 							<template #suffix>GitHub misskey-dev/misskey</template>
 						</FormLink>
+					</div>
+				</FormSection>
+				<FormSection v-if="instance.repositoryUrl !== 'https://github.com/misskey-dev/misskey'">
+					<div class="_gaps_s">
+						<MkInfo>
+							{{ i18n.tsx._aboutMisskey.thisIsModifiedVersion({ name: instance.name }) }}
+						</MkInfo>
+						<FormLink v-if="instance.repositoryUrl" :to="instance.repositoryUrl" external>
+							<template #icon><i class="ti ti-code"></i></template>
+							{{ i18n.ts._aboutMisskey.source }}
+						</FormLink>
+						<FormLink v-if="instance.providesTarball" :to="`/tarball/misskey-${version}.tar.gz`" external>
+							<template #icon><i class="ti ti-download"></i></template>
+							{{ i18n.ts._aboutMisskey.source }}
+							<template #suffix>Tarball</template>
+						</FormLink>
+						<MkInfo v-if="!instance.repositoryUrl && !instance.providesTarball" warn>
+							{{ i18n.ts.sourceCodeIsNotYetProvided }}
+						</MkInfo>
 					</div>
 				</FormSection>
 				<FormSection>
@@ -64,33 +83,19 @@ SPDX-License-Identifier: AGPL-3.0-only
 							<img src="https://avatars.githubusercontent.com/u/67428053?v=4" :class="$style.contributorAvatar">
 							<span :class="$style.contributorUsername">@kakkokari-gtyih</span>
 						</a>
-						<a href="https://github.com/taichanNE30" target="_blank" :class="$style.contributor">
+						<a href="https://github.com/tai-cha" target="_blank" :class="$style.contributor">
 							<img src="https://avatars.githubusercontent.com/u/40626578?v=4" :class="$style.contributorAvatar">
-							<span :class="$style.contributorUsername">@taichanNE30</span>
+							<span :class="$style.contributorUsername">@tai-cha</span>
+						</a>
+						<a href="https://github.com/samunohito" target="_blank" :class="$style.contributor">
+							<img src="https://avatars.githubusercontent.com/u/46447427?v=4" :class="$style.contributorAvatar">
+							<span :class="$style.contributorUsername">@samunohito</span>
+						</a>
+						<a href="https://github.com/anatawa12" target="_blank" :class="$style.contributor">
+							<img src="https://avatars.githubusercontent.com/u/22656849?v=4" :class="$style.contributorAvatar">
+							<span :class="$style.contributorUsername">@anatawa12</span>
 						</a>
 					</div>
-				</FormSection>
-				<FormSection>
-					<template #label>{{ i18n.ts._aboutMisskey.contributors }}</template>
-					<div :class="$style.contributors" style="margin-bottom: 8px;">
-						<a href="https://github.com/164-life" target="_blank" :class="$style.contributor">
-							<img src="https://avatars.githubusercontent.com/u/146170742?v=4" :class="$style.contributorAvatar">
-							<span :class="$style.contributorUsername">@164-life</span>
-						</a>
-						<a href="https://github.com/mei23" target="_blank" :class="$style.contributor">
-							<img src="https://avatars.githubusercontent.com/u/30769358?v=4" :class="$style.contributorAvatar">
-							<span :class="$style.contributorUsername">@mei23</span>
-						</a>
-						<a href="https://github.com/rinsuki" target="_blank" :class="$style.contributor">
-							<img src="https://avatars.githubusercontent.com/u/6533808?v=4" :class="$style.contributorAvatar">
-							<span :class="$style.contributorUsername">@rinsuki</span>
-						</a>
-						<a href="https://github.com/robflop" target="_blank" :class="$style.contributor">
-							<img src="https://avatars.githubusercontent.com/u/8159402?v=4" :class="$style.contributorAvatar">
-							<span :class="$style.contributorUsername">@robflop</span>
-						</a>
-					</div>
-					<MkLink url="https://github.com/misskey-dev/misskey/graphs/contributors">{{ i18n.ts._aboutMisskey.allContributors }}</MkLink>
 				</FormSection>
 				<FormSection>
 					<template #label>Special thanks</template>
@@ -126,14 +131,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onBeforeUnmount } from 'vue';
+import { nextTick, onBeforeUnmount, ref, shallowRef, computed } from 'vue';
 import { version } from '@/config.js';
 import FormLink from '@/components/form/link.vue';
 import FormSection from '@/components/form/section.vue';
 import MkButton from '@/components/MkButton.vue';
-import MkLink from '@/components/MkLink.vue';
+import MkInfo from '@/components/MkInfo.vue';
 import { physics } from '@/scripts/physics.js';
 import { i18n } from '@/i18n.js';
+import { instance } from '@/instance.js';
 import { defaultStore } from '@/store.js';
 import * as os from '@/os.js';
 import { definePageMetadata } from '@/scripts/page-metadata.js';
@@ -146,18 +152,23 @@ const patronsWithIcon = [{
 const patrons = [
 ];
 
-let thereIsTreasure = $ref($i && !claimedAchievements.includes('foundTreasure'));
+const thereIsTreasure = ref($i && !claimedAchievements.includes('foundTreasure'));
 
 let easterEggReady = false;
-let easterEggEmojis = $ref([]);
-let easterEggEngine = $ref(null);
-const containerEl = $shallowRef<HTMLElement>();
+const easterEggEmojis = ref<{
+	id: string,
+	top: number,
+	left: number,
+	emoji: string
+}[]>([]);
+const easterEggEngine = ref<{ stop: () => void } | null>(null);
+const containerEl = shallowRef<HTMLElement>();
 
 function iconLoaded() {
 	const emojis = defaultStore.state.reactions;
-	const containerWidth = containerEl.offsetWidth;
+	const containerWidth = containerEl.value.offsetWidth;
 	for (let i = 0; i < 32; i++) {
-		easterEggEmojis.push({
+		easterEggEmojis.value.push({
 			id: i.toString(),
 			top: -(128 + (Math.random() * 256)),
 			left: (Math.random() * containerWidth),
@@ -173,7 +184,7 @@ function iconLoaded() {
 function gravity() {
 	if (!easterEggReady) return;
 	easterEggReady = false;
-	easterEggEngine = physics(containerEl);
+	easterEggEngine.value = physics(containerEl.value);
 }
 
 function iLoveMisskey() {
@@ -184,24 +195,24 @@ function iLoveMisskey() {
 }
 
 function getTreasure() {
-	thereIsTreasure = false;
+	thereIsTreasure.value = false;
 	claimAchievement('foundTreasure');
 }
 
 onBeforeUnmount(() => {
-	if (easterEggEngine) {
-		easterEggEngine.stop();
+	if (easterEggEngine.value) {
+		easterEggEngine.value.stop();
 	}
 });
 
-const headerActions = $computed(() => []);
+const headerActions = computed(() => []);
 
-const headerTabs = $computed(() => []);
+const headerTabs = computed(() => []);
 
-definePageMetadata({
+definePageMetadata(() => ({
 	title: i18n.ts.aboutMisskey,
 	icon: null,
-});
+}));
 </script>
 
 <style lang="scss" scoped>

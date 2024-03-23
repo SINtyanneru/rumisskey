@@ -1,10 +1,16 @@
 <!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-FileCopyrightText: syuilo and misskey-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
 <template>
-<span v-if="errored">:{{ customEmojiName }}:</span>
+<img
+	v-if="errored && fallbackToImage"
+	:class="[$style.root, { [$style.normal]: normal, [$style.noStyle]: noStyle }]"
+	src="/client-assets/dummy.png"
+	:title="alt"
+/>
+<span v-else-if="errored">:{{ customEmojiName }}:</span>
 <img
 	v-else
 	:class="[$style.root, { [$style.normal]: normal, [$style.noStyle]: noStyle }]"
@@ -19,13 +25,16 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { computed, inject } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { getProxiedImageUrl, getStaticImageUrl } from '@/scripts/media-proxy.js';
 import { defaultStore } from '@/store.js';
 import { customEmojisMap } from '@/custom-emojis.js';
 import * as os from '@/os.js';
+import { misskeyApiGet } from '@/scripts/misskey-api.js';
 import copyToClipboard from '@/scripts/copy-to-clipboard.js';
+import * as sound from '@/scripts/sound.js';
 import { i18n } from '@/i18n.js';
+import MkCustomEmojiDetailedDialog from '@/components/MkCustomEmojiDetailedDialog.vue';
 
 const props = defineProps<{
 	name: string;
@@ -36,6 +45,7 @@ const props = defineProps<{
 	useOriginalSize?: boolean;
 	menu?: boolean;
 	menuReaction?: boolean;
+	fallbackToImage?: boolean;
 }>();
 
 const react = inject<((name: string) => void) | null>('react', null);
@@ -54,7 +64,7 @@ const rawUrl = computed(() => {
 });
 
 const url = computed(() => {
-	if (rawUrl.value == null) return null;
+	if (rawUrl.value == null) return undefined;
 
 	const proxied =
 		(rawUrl.value.startsWith('/emoji/') || (props.useOriginalSize && isLocal.value))
@@ -71,7 +81,7 @@ const url = computed(() => {
 });
 
 const alt = computed(() => `:${customEmojiName.value}:`);
-let errored = $ref(url.value == null);
+const errored = ref(url.value == null);
 
 function onClick(ev: MouseEvent) {
 	if (props.menu) {
@@ -90,8 +100,21 @@ function onClick(ev: MouseEvent) {
 			icon: 'ti ti-plus',
 			action: () => {
 				react(`:${props.name}:`);
+				sound.playMisskeySfx('reaction');
 			},
-		}] : [])], ev.currentTarget ?? ev.target);
+		}] : []), {
+			text: i18n.ts.info,
+			icon: 'ti ti-info-circle',
+			action: async () => {
+				os.popup(MkCustomEmojiDetailedDialog, {
+					emoji: await misskeyApiGet('emoji', {
+						name: customEmojiName.value,
+					}),
+				}, {
+					anchor: ev.target,
+				});
+			},
+		}], ev.currentTarget ?? ev.target);
 	}
 }
 </script>

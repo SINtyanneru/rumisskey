@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: syuilo and other misskey contributors
+SPDX-FileCopyrightText: syuilo and misskey-project
 SPDX-License-Identifier: AGPL-3.0-only
 -->
 
@@ -15,7 +15,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 		<template #default="{ items: notifications }">
 			<MkDateSeparatedList v-slot="{ item: notification }" :class="$style.list" :items="notifications" :noGap="true">
-				<MkNote v-if="['reply', 'quote', 'mention'].includes(notification.type)" :key="notification.id" :note="notification.note"/>
+				<MkNote v-if="['reply', 'quote', 'mention'].includes(notification.type)" :key="notification.id + ':note'" :note="notification.note" :withHardMute="true"/>
 				<XNotification v-else :key="notification.id" :notification="notification" :withTime="true" :full="true" class="_panel"/>
 			</MkDateSeparatedList>
 		</template>
@@ -25,17 +25,17 @@ SPDX-License-Identifier: AGPL-3.0-only
 
 <script lang="ts" setup>
 import { onUnmounted, onDeactivated, onMounted, computed, shallowRef, onActivated } from 'vue';
-import MkPagination, { Paging } from '@/components/MkPagination.vue';
+import MkPagination from '@/components/MkPagination.vue';
 import XNotification from '@/components/MkNotification.vue';
 import MkDateSeparatedList from '@/components/MkDateSeparatedList.vue';
 import MkNote from '@/components/MkNote.vue';
 import { useStream } from '@/stream.js';
-import { $i } from '@/account.js';
 import { i18n } from '@/i18n.js';
 import { notificationTypes } from '@/const.js';
 import { infoImageUrl } from '@/instance.js';
 import { defaultStore } from '@/store.js';
 import MkPullToRefresh from '@/components/MkPullToRefresh.vue';
+import * as Misskey from 'misskey-js';
 
 const props = defineProps<{
 	excludeTypes?: typeof notificationTypes[number][];
@@ -43,7 +43,7 @@ const props = defineProps<{
 
 const pagingComponent = shallowRef<InstanceType<typeof MkPagination>>();
 
-const pagination: Paging = defaultStore.state.useGroupedNotifications ? {
+const pagination = computed(() => defaultStore.reactiveState.useGroupedNotifications.value ? {
 	endpoint: 'i/notifications-grouped' as const,
 	limit: 20,
 	params: computed(() => ({
@@ -55,7 +55,7 @@ const pagination: Paging = defaultStore.state.useGroupedNotifications ? {
 	params: computed(() => ({
 		excludeTypes: props.excludeTypes ?? undefined,
 	})),
-};
+});
 
 function onNotification(notification) {
 	const isMuted = props.excludeTypes ? props.excludeTypes.includes(notification.type) : false;
@@ -64,7 +64,7 @@ function onNotification(notification) {
 	}
 
 	if (!isMuted) {
-		pagingComponent.value.prepend(notification);
+		pagingComponent.value?.prepend(notification);
 	}
 }
 
@@ -76,17 +76,19 @@ function reload() {
 	});
 }
 
-let connection;
+let connection: Misskey.ChannelConnection<Misskey.Channels['main']>;
 
 onMounted(() => {
 	connection = useStream().useChannel('main');
 	connection.on('notification', onNotification);
+	connection.on('notificationFlushed', reload);
 });
 
 onActivated(() => {
 	pagingComponent.value?.reload();
 	connection = useStream().useChannel('main');
 	connection.on('notification', onNotification);
+	connection.on('notificationFlushed', reload);
 });
 
 onUnmounted(() => {
